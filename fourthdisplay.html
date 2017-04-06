@@ -6,54 +6,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="telephone=no" name="format-detection"/>
     <title>Display 4</title>
-    <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
-    });
-
-
-    </script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
-    </script>
-
     <style>
+        body {
+            background-color: #eeeeee;
+        }
+
         * {
             box-sizing: border-box;
         }
 
         .container {
-            display: flex;
         }
 
         .container .item {
+            width: 25%;
+            font-size: x-large;
+            font-weight: 900;
             background-color: #ff7247;
             color: #ffffff;
-            flex: 1;
             margin-bottom: 1rem;
             margin-top: 1rem;
+            border: 1px solid #9ba0b1;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #9ba0b1;
+            height: 6.5rem;
+        }
+
+        .container .item.selected {
+            background-color: yellow;
+            color: #000;
         }
 
         .container .item.left {
-            margin-left: 10%;
-            margin-right: 5%;
+            float: left;
+            margin-left: 15%;
         }
 
         .container .item.right {
-            margin-left: 5%;
-            margin-right: 10%;
+            float: right;
+            margin-right: 15%;
         }
 
     </style>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+    });
+
+    </script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
+    </script>
+    <script src="./vue.js"></script>
+    <!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+    <!--<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>-->
 </head>
 <body>
-<h1> ---- (HIPPO-27 style 3) ---- </h1>
-<div class="container">
-    <button class="item left" style="background-color: yellow; color: #000;"> $${50 \over 100}$$</button>
-    <button class="item right"> $${72 \over 144}$$</button>
+<div class="container" id="app">
+    <div>
+        <p></p>
+    </div>
+
+    <button class="item" v-for="question in questions" v-bind:class="[question.isLeft ? 'left' : 'right']">
+        {{question.content}}
+    </button>
 </div>
-<div class="container">
-    <button class="item left"> $${10 \over 5}$$</button>
-    <button class="item right"> $${35 \over 70}$$</button>
-</div>
+<script type="text/javascript">
+    //
+    var dataSource = {
+        Display1: "$${50 \over 100}$$|$${72 \over 144}$$|50%|$${10 \over 5}$$|$${35 \over 70}$$|0.5",
+        DescriptionText: "Which of these <font color=red>doesn't</font> equal or represent <font color=green>half</font>?"
+    };
+    function initializeData(data) {
+        var questions = [];
+        var transferredData = data.Display1.replace(/\\*over/g, '\\over');
+        var dataArray = transferredData.split('|');
+        for (var i = 0; i < dataArray.length; i++) {
+            var questionItem;
+            if (i % 2 === 0) {
+                questionItem = {content: dataArray[i], isLeft: true}
+            } else {
+                questionItem = {content: dataArray[i], isLeft: false}
+            }
+            questions.push(questionItem);
+        }
+        console.log("questions: " + JSON.stringify(questions));
+        return (questions);
+    }
+    var app = new Vue({
+        el: '#app',
+        data: {
+            questions: initializeData(dataSource)
+        }
+    })
+</script>
+
 </body>
 </html>
