@@ -55,14 +55,14 @@
         }
 
         article.container section.ending button#submit {
-            width:40%;
+            width: 40%;
             font-size: x-large;
             font-weight: bold;
             background-color: #ff7247;
             color: #ffffff;
             margin-bottom: 1rem;
             margin-top: 0;
-            margin-left:30%;
+            margin-left: 30%;
             margin-right: 30%;
             border: 1px solid #9ba0b1;
             border-radius: 5px;
@@ -87,10 +87,11 @@
         <p v-html="description"></p>
     </section>
     <section class="content">
-        <button class="item" v-for="question in questions" v-bind:class="[question.isLeft ? 'left' : 'right']">
+        <button class="item" v-for="question in questions"
+                v-bind:class="{'left' : question.isLeft, 'right': !question.isLeft, 'selected' : question.isSelected}"
+                @click="selectItem(question.id)">
             {{question.content}}
         </button>
-
     </section>
     <section class="ending">
         <button id="submit">Submit</button>
@@ -108,9 +109,9 @@
         for (var i = 0; i < dataArray.length; i++) {
             var questionItem;
             if (i % 2 === 0) {
-                questionItem = {content: dataArray[i], isLeft: true}
+                questionItem = {content: dataArray[i], isLeft: true, id: i, isSelected: false}
             } else {
-                questionItem = {content: dataArray[i], isLeft: false}
+                questionItem = {content: dataArray[i], isLeft: false, id: i, isSelected: false}
             }
             questions.push(questionItem);
         }
@@ -123,6 +124,15 @@
         data: {
             description: data.description,
             questions: data.questions
+        },
+        methods: {
+            selectItem: function (id) {
+                for (var i = 0; i < data.questions.length; i++) {
+                    data.questions[i].isSelected = false;
+                }
+                data.questions[id].isSelected = !data.questions[id].isSelected;
+                console.log('click item' + id);
+            }
         }
     })
 </script>
