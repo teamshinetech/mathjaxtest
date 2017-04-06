@@ -15,13 +15,20 @@
             box-sizing: border-box;
         }
 
-        .container {
+        article.container {
         }
 
-        .container .item {
+        article.container section.title {
+            height: 4rem;
+            border-radius: 3px;
+            background-color: #ffffff;
+            box-shadow: 0 0 2px #9ba0b1;
+        }
+
+        article.container section.content .item {
             width: 25%;
             font-size: x-large;
-            font-weight: 900;
+            font-weight: bold;
             background-color: #ff7247;
             color: #ffffff;
             margin-bottom: 1rem;
@@ -32,17 +39,17 @@
             height: 6.5rem;
         }
 
-        .container .item.selected {
+        article.container section.content .item.selected {
             background-color: yellow;
             color: #000;
         }
 
-        .container .item.left {
+        article.container section.content .item.left {
             float: left;
             margin-left: 15%;
         }
 
-        .container .item.right {
+        article.container section.content .item.right {
             float: right;
             margin-right: 15%;
         }
@@ -52,7 +59,6 @@
     MathJax.Hub.Config({
         tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
     });
-
     </script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
     </script>
@@ -61,17 +67,19 @@
     <!--<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>-->
 </head>
 <body>
-<div class="container" id="app">
-    <div>
-        <p></p>
-    </div>
+<article class="container" id="app">
+    <section class="title">
+        <p v-html="description"></p>
+    </section>
+    <section class="content">
+        <button class="item" v-for="question in questions" v-bind:class="[question.isLeft ? 'left' : 'right']">
+            {{question.content}}
+        </button>
 
-    <button class="item" v-for="question in questions" v-bind:class="[question.isLeft ? 'left' : 'right']">
-        {{question.content}}
-    </button>
-</div>
+        <button class=""></button>
+    </section>
+</article>
 <script type="text/javascript">
-    //
     var dataSource = {
         Display1: "$${50 \over 100}$$|$${72 \over 144}$$|50%|$${10 \over 5}$$|$${35 \over 70}$$|0.5",
         DescriptionText: "Which of these <font color=red>doesn't</font> equal or represent <font color=green>half</font>?"
@@ -89,16 +97,17 @@
             }
             questions.push(questionItem);
         }
-        console.log("questions: " + JSON.stringify(questions));
-        return (questions);
+        return ({description: data.DescriptionText, questions: questions});
     }
+    var data = initializeData(dataSource);
+    console.log("data: " + JSON.stringify(data));
     var app = new Vue({
         el: '#app',
         data: {
-            questions: initializeData(dataSource)
+            description: data.description,
+            questions: data.questions
         }
     })
 </script>
-
 </body>
 </html>
