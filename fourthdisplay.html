@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="telephone=no" name="format-detection"/>
     <title>Display 4</title>
@@ -15,60 +14,22 @@
             box-sizing: border-box;
         }
 
-        article.container {
+        article.container section.content div.MathJax_Display {
+            background-color: #5aaf4b;
+            color: #eeeeee;
+            height: 5rem;
         }
 
-        article.container section.title {
-            height: 4rem;
-            border-radius: 3px;
-            background-color: #ffffff;
-            box-shadow: 0 0 2px #9ba0b1;
-        }
+        /*article.container {*/
+            /*margin-left: 10%;*/
+            /*margin-right: 10%;*/
+        /*}*/
 
-        article.container section.content .item {
-            width: 25%;
-            font-size: x-large;
-            font-weight: bold;
-            background-color: #ff7247;
-            color: #ffffff;
-            margin-bottom: 1rem;
-            margin-top: 1rem;
-            border: 1px solid #9ba0b1;
-            border-radius: 5px;
-            box-shadow: 0 0 5px #9ba0b1;
-            height: 6.5rem;
-        }
-
-        article.container section.content .item.selected {
-            background-color: yellow;
-            color: #000;
-        }
-
-        article.container section.content .item.left {
-            float: left;
-            margin-left: 15%;
-        }
-
-        article.container section.content .item.right {
-            float: right;
-            margin-right: 15%;
-        }
-
-        article.container section.ending button#submit {
-            width: 40%;
-            font-size: x-large;
-            font-weight: bold;
-            background-color: #ff7247;
-            color: #ffffff;
-            margin-bottom: 1rem;
-            margin-top: 0;
-            margin-left: 30%;
-            margin-right: 30%;
-            border: 1px solid #9ba0b1;
-            border-radius: 5px;
-            box-shadow: 0 0 5px #9ba0b1;
-            height: 4rem;
-        }
+        /*article.container section.content {*/
+            /*background-color: #5aaf4b;*/
+            /*color: #eeeeee;*/
+            /*height: 5rem;*/
+        /*}*/
     </style>
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -83,58 +44,47 @@
 </head>
 <body>
 <article class="container" id="app">
-    <section class="title">
-        <p v-html="description"></p>
-    </section>
     <section class="content">
-        <button class="item" v-for="question in questions"
-                v-bind:class="{'left' : question.isLeft, 'right': !question.isLeft, 'selected' : question.isSelected}"
-                @click="selectItem(question.id)">
-            {{question.content}}
-        </button>
-    </section>
-    <section class="ending">
-        <button id="submit">Submit</button>
+        <div class="item">$${7 \over 12} = {x \over 22}$$</div>
     </section>
 </article>
-<script type="text/javascript">
-    var dataSource = {
-        Display1: "$${50 \over 100}$$|$${72 \over 144}$$|50%|$${10 \over 5}$$|$${35 \over 70}$$|0.5",
-        DescriptionText: "Which of these <font color=red>doesn't</font> equal or represent <font color=green>half</font>?"
-    };
-    function initializeData(data) {
-        var questions = [];
-        var transferredData = data.Display1.replace(/\\*over/g, '\\over');
-        var dataArray = transferredData.split('|');
-        for (var i = 0; i < dataArray.length; i++) {
-            var questionItem;
-            if (i % 2 === 0) {
-                questionItem = {content: dataArray[i], isLeft: true, id: i, isSelected: false}
-            } else {
-                questionItem = {content: dataArray[i], isLeft: false, id: i, isSelected: false}
-            }
-            questions.push(questionItem);
-        }
-        return ({description: data.DescriptionText, questions: questions});
-    }
-    var data = initializeData(dataSource);
-    console.log("data: " + JSON.stringify(data));
-    var app = new Vue({
-        el: '#app',
-        data: {
-            description: data.description,
-            questions: data.questions
-        },
-        methods: {
-            selectItem: function (id) {
-                for (var i = 0; i < data.questions.length; i++) {
-                    data.questions[i].isSelected = false;
-                }
-                data.questions[id].isSelected = !data.questions[id].isSelected;
-                console.log('click item' + id);
-            }
-        }
-    })
-</script>
+<!--<script type="text/javascript">-->
+    <!--var dataSource = {-->
+        <!--Display1: "$${7 \over 12} = {x \over 22}$$|<input type=text style='border:0;border-bottom: 1px solid'></input> = X"-->
+    <!--};-->
+    <!--function initializeData(data) {-->
+        <!--var questions = [];-->
+        <!--var transferredData = data.Display1.replace(/\\*over/g, '\\over');-->
+        <!--var dataArray = transferredData.split('|');-->
+        <!--for (var i = 0; i < dataArray.length; i++) {-->
+            <!--var questionItem;-->
+            <!--if (i % 2 === 0) {-->
+                <!--questionItem = {content: dataArray[i], isLeft: true, id: i, isSelected: false}-->
+            <!--} else {-->
+                <!--questionItem = {content: dataArray[i], isLeft: false, id: i, isSelected: false}-->
+            <!--}-->
+            <!--questions.push(questionItem);-->
+        <!--}-->
+        <!--return ({description: data.DescriptionText, questions: questions});-->
+    <!--}-->
+    <!--var data = initializeData(dataSource);-->
+    <!--console.log("data: " + JSON.stringify(data));-->
+    <!--var app = new Vue({-->
+        <!--el: '#app',-->
+        <!--data: {-->
+            <!--description: data.description,-->
+            <!--questions: data.questions-->
+        <!--},-->
+        <!--methods: {-->
+            <!--selectItem: function (id) {-->
+                <!--for (var i = 0; i < data.questions.length; i++) {-->
+                    <!--data.questions[i].isSelected = false;-->
+                <!--}-->
+                <!--data.questions[id].isSelected = !data.questions[id].isSelected;-->
+                <!--console.log('click item' + id);-->
+            <!--}-->
+        <!--}-->
+    <!--})-->
+<!--</script>-->
 </body>
 </html>
