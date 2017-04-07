@@ -29,6 +29,7 @@
             margin-bottom: 1rem;
             margin-top: 1rem;
             height: 6.5rem;
+            display: inline-block;
         }
 
         article.container section.content .item button {
@@ -43,19 +44,25 @@
             height: 100%;
         }
 
+        article.container section.content {
+            position: relative;
+        }
+
         article.container section.content .item.selected button {
             background-color: yellow;
             color: #000;
         }
 
         article.container section.content .item.left {
-            float: left;
-            margin-left: 15%;
+            position: relative;
+            /*left: 15%;*/
+            /*margin-left: 15%;*/
         }
 
         article.container section.content .item.right {
-            float: right;
-            margin-right: 15%;
+            position: relative;
+            /*right: 15%;*/
+            /*margin-right: 15%;*/
         }
 
         article.container section.ending button#submit {
@@ -72,6 +79,20 @@
             border-radius: 5px;
             box-shadow: 0 0 5px #9ba0b1;
             height: 4rem;
+        }
+
+        article.container section.content .mask.activated {
+            opacity: 0.5;
+            z-index:100;
+        }
+
+        article.container section.content .mask.activated img {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
         }
     </style>
     <script type="text/x-mathjax-config">
@@ -92,13 +113,13 @@
         <p v-html="description"></p>
     </section>
     <section class="content">
-        <div v-for="question in questions" class="mask item"
+        <div v-for="question in questions" class="mask item activated"
              v-bind:class="{'left' : question.isLeft, 'right': !question.isLeft, 'selected' : question.isSelected}">
             <button @click="selectItem(question.id)">
                 {{question.content}}
             </button>
+            <img src="./red.png" alt="">
         </div>
-
     </section>
     <section class="ending">
         <button id="submit" @click="submitAnswers()">Submit</button>
