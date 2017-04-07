@@ -25,20 +25,25 @@
         }
 
         article.container section.content .item {
-            width: 25%;
+            width: 30%;
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+            height: 6.5rem;
+        }
+
+        article.container section.content .item button {
             font-size: x-large;
             font-weight: bold;
             background-color: #ff7247;
             color: #ffffff;
-            margin-bottom: 1rem;
-            margin-top: 1rem;
             border: 1px solid #9ba0b1;
             border-radius: 5px;
             box-shadow: 0 0 5px #9ba0b1;
-            height: 6.5rem;
+            width: 100%;
+            height: 100%;
         }
 
-        article.container section.content .item.selected {
+        article.container section.content .item.selected button {
             background-color: yellow;
             color: #000;
         }
@@ -73,6 +78,7 @@
     MathJax.Hub.Config({
         tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
     });
+
     </script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
     </script>
@@ -86,20 +92,24 @@
         <p v-html="description"></p>
     </section>
     <section class="content">
-        <button class="item" v-for="question in questions"
-                v-bind:class="{'left' : question.isLeft, 'right': !question.isLeft, 'selected' : question.isSelected}"
-                @click="selectItem(question.id)">
-            {{question.content}}
-        </button>
+        <div v-for="question in questions" class="mask item"
+             v-bind:class="{'left' : question.isLeft, 'right': !question.isLeft, 'selected' : question.isSelected}">
+            <button @click="selectItem(question.id)">
+                {{question.content}}
+            </button>
+        </div>
+
     </section>
     <section class="ending">
-        <button id="submit">Submit</button>
+        <button id="submit" @click="submitAnswers()">Submit</button>
     </section>
 </article>
 <script type="text/javascript">
     var dataSource = {
+        CorrectAnswer: "10/5",
         Display1: "$${50 \over 100}$$|$${72 \over 144}$$|50%|$${10 \over 5}$$|$${35 \over 70}$$|0.5",
-        DescriptionText: "Which of these <font color=red>doesn't</font> equal or represent <font color=green>half</font>?"
+        DescriptionText: "Which of these <font color=red>doesn't</font> equal or represent <font color=green>half</font>?",
+        Display1RawValue: "50/100|72/144|50%|10/5|35/70|0.5"
     };
     function initializeData(data) {
         var questions = [];
@@ -114,7 +124,13 @@
             }
             questions.push(questionItem);
         }
-        return ({description: data.DescriptionText, questions: questions});
+        var rawQuestions = data.Display1RawValue.split('|');
+        return ({
+            description: data.DescriptionText,
+            questions: questions,
+            correctAnswer: data.CorrectAnswer,
+            rawQuestions: rawQuestions
+        });
     }
     var data = initializeData(dataSource);
     console.log("data: " + JSON.stringify(data));
@@ -122,15 +138,38 @@
         el: '#app',
         data: {
             description: data.description,
-            questions: data.questions
+            questions: data.questions,
+            correctAnswer: data.correctAnswer,
+            rawQuestions: data.rawQuestions,
+            studentAnswer: "",
+            isCorrectAnswer: false,
+            hasFilledOut: false
         },
         methods: {
             selectItem: function (id) {
                 for (var i = 0; i < data.questions.length; i++) {
-                    data.questions[i].isSelected = false;
+                    if (i !== id) {
+                        data.questions[i].isSelected = false;
+                    }
                 }
                 data.questions[id].isSelected = !data.questions[id].isSelected;
                 console.log('click item' + id);
+            },
+            submitAnswers: function () {
+                console.log("submitAnswers");
+                var hasFilledOut = false;
+                for (var i = 0; i < data.questions.length; i++) {
+                    if (data.questions[i].isSelected) {
+                        hasFilledOut = true;
+                        data.studentAnswer = data.rawQuestions[i];
+                        data.isCorrectAnswer = data.studentAnswer === data.correctAnswer;
+                        console.log('studentAnswer: ' + data.studentAnswer, 'isCorrectAnswer: ' + data.isCorrectAnswer);
+                    }
+                }
+                data.hasFilledOut = hasFilledOut;
+                if (!data.hasFilledOut) {
+                    alert("You haven't filled out all answers!");
+                }
             }
         }
     })

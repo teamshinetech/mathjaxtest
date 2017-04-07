@@ -48,43 +48,19 @@
         <div class="item">$${7 \over 12} = {x \over 22}$$</div>
     </section>
 </article>
-<!--<script type="text/javascript">-->
-    <!--var dataSource = {-->
-        <!--Display1: "$${7 \over 12} = {x \over 22}$$|<input type=text style='border:0;border-bottom: 1px solid'></input> = X"-->
-    <!--};-->
-    <!--function initializeData(data) {-->
-        <!--var questions = [];-->
-        <!--var transferredData = data.Display1.replace(/\\*over/g, '\\over');-->
-        <!--var dataArray = transferredData.split('|');-->
-        <!--for (var i = 0; i < dataArray.length; i++) {-->
-            <!--var questionItem;-->
-            <!--if (i % 2 === 0) {-->
-                <!--questionItem = {content: dataArray[i], isLeft: true, id: i, isSelected: false}-->
-            <!--} else {-->
-                <!--questionItem = {content: dataArray[i], isLeft: false, id: i, isSelected: false}-->
-            <!--}-->
-            <!--questions.push(questionItem);-->
-        <!--}-->
-        <!--return ({description: data.DescriptionText, questions: questions});-->
-    <!--}-->
-    <!--var data = initializeData(dataSource);-->
-    <!--console.log("data: " + JSON.stringify(data));-->
-    <!--var app = new Vue({-->
-        <!--el: '#app',-->
-        <!--data: {-->
-            <!--description: data.description,-->
-            <!--questions: data.questions-->
-        <!--},-->
-        <!--methods: {-->
-            <!--selectItem: function (id) {-->
-                <!--for (var i = 0; i < data.questions.length; i++) {-->
-                    <!--data.questions[i].isSelected = false;-->
-                <!--}-->
-                <!--data.questions[id].isSelected = !data.questions[id].isSelected;-->
-                <!--console.log('click item' + id);-->
-            <!--}-->
-        <!--}-->
-    <!--})-->
-<!--</script>-->
+<script>
+    var dataSource = {
+        Display1: "$${7 \over 12} = {x \over 22}$$|<input type=text style='border:0;border-bottom: 1px solid'></input> = X"
+    };
+    var app = new Vue({
+        el: '#app',
+        data: {
+            content: dataSource.Display1
+        },
+        methods: {
+
+        }
+    })
+</script>
 </body>
 </html>
