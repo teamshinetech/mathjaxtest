@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="telephone=no" name="format-detection"/>
+    <title>Display 5</title>
+    <style>
+        body {
+            background-color: #eeeeee;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        article.container section.content {
+            background-color: #5aaf4b;
+            padding-left: 20%;
+        }
+
+        article.container section.content .item {
+            font-size: x-large;
+            font-weight: bold;
+            display: inline-block;
+            background-color: #5aaf4b;
+            color: #eeeeee;
+            width: 20%;
+            height: 6rem;
+            border: none;
+            vertical-align: top;
+        }
+
+        /*article.container {*/
+        /*margin-left: 10%;*/
+        /*margin-right: 10%;*/
+        /*}*/
+
+        /*article.container section.content {*/
+        /*background-color: #5aaf4b;*/
+        /*color: #eeeeee;*/
+        /*height: 5rem;*/
+        /*}*/
+    </style>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+    });
+
+    </script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
+    </script>
+    <script src="./vue.js"></script>
+    <!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+    <!--<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>-->
+</head>
+<body>
+<article class="container" id="app">
+    <section class="content">
+        <button class="item">{{leftString}}</button>
+        <button class="item">=</button>
+        <button class="item">{{rightString}}</button>
+    </section>
+</article>
+<script>
+    var dataSource = {
+        Display1: "$${7 \over 12} = {x \over 22}$$|<input type=text style='border:0;border-bottom: 1px solid'></input> = X"
+    };
+    function initializeData(data) {
+        var transferredData = data.Display1.replace(/\\*over/g, '\\over');
+        var displayStringArray = transferredData.split('|');
+        display1RawStringArray = displayStringArray[0].split('=');
+        var leftString = display1RawStringArray[0] + "$$";
+        var rightString = "$$" + display1RawStringArray[1];
+
+        return ({
+            leftString: leftString,
+            rightString: rightString
+        })
+    }
+    var modifiedData = initializeData(dataSource);
+    console.log("data " + JSON.stringify(modifiedData));
+    var app = new Vue({
+        el: '#app',
+        data: {
+            leftString: modifiedData.leftString,
+            rightString: modifiedData.rightString
+        }
+    })
+</script>
+</body>
+</html>
