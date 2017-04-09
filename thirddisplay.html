@@ -15,6 +15,7 @@
         }
 
         article.container {
+            position: relative;
         }
 
         article.container section.title {
@@ -24,12 +25,18 @@
             box-shadow: 0 0 2px #9ba0b1;
         }
 
+        article.container section.content {
+        }
+
         article.container section.content .item {
+            position: relative;
+            left: 0;
             width: 30%;
             margin-bottom: 1rem;
             margin-top: 1rem;
             height: 6.5rem;
             display: inline-block;
+            vertical-align: top;
         }
 
         article.container section.content .item button {
@@ -44,25 +51,19 @@
             height: 100%;
         }
 
-        article.container section.content {
-            position: relative;
-        }
-
         article.container section.content .item.selected button {
             background-color: yellow;
             color: #000;
         }
 
         article.container section.content .item.left {
-            position: relative;
-            /*left: 15%;*/
-            /*margin-left: 15%;*/
+            margin-left: 15%;
+            margin-right: 5%;
         }
 
         article.container section.content .item.right {
-            position: relative;
-            /*right: 15%;*/
-            /*margin-right: 15%;*/
+            margin-right: 15%;
+            margin-left: 5%;
         }
 
         article.container section.ending button#submit {
@@ -81,25 +82,39 @@
             height: 4rem;
         }
 
+        article.container section.content .mask img {
+            display: none;
+        }
+
         article.container section.content .mask.activated {
             opacity: 0.5;
-            z-index:100;
+            z-index: 100;
         }
 
         article.container section.content .mask.activated img {
+            display: block;
             position: absolute;
             top: 0;
             bottom: 0;
             left: 0;
             right: 0;
             z-index: 100;
+            width: 100%;
+            height: 100%;
+        }
+
+        visiable {
+            display: block !important;
+        }
+
+        invisiable {
+            display: none !important;
         }
     </style>
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
     });
-
     </script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
     </script>
@@ -113,12 +128,12 @@
         <p v-html="description"></p>
     </section>
     <section class="content">
-        <div v-for="question in questions" class="mask item activated"
-             v-bind:class="{'left' : question.isLeft, 'right': !question.isLeft, 'selected' : question.isSelected}">
+        <div v-for="question in questions" class="mask item"
+             v-bind:class="{'left' : question.isLeft, 'right': !question.isLeft, 'selected' : question.isSelected, 'activated': question.isSubmitted}">
             <button @click="selectItem(question.id)">
                 {{question.content}}
             </button>
-            <img src="./red.png" alt="">
+            <img alt="" v-bind:src="question.isCorrectAnswer ? './green.png' : './red.png'">
         </div>
     </section>
     <section class="ending">
@@ -136,16 +151,23 @@
         var questions = [];
         var transferredData = data.Display1.replace(/\\*over/g, '\\over');
         var dataArray = transferredData.split('|');
+        var rawQuestions = data.Display1RawValue.split('|');
         for (var i = 0; i < dataArray.length; i++) {
             var questionItem;
             if (i % 2 === 0) {
-                questionItem = {content: dataArray[i], isLeft: true, id: i, isSelected: false}
+                questionItem = {content: dataArray[i], isLeft: true, id: i, isSelected: false, isSubmitted: false}
             } else {
-                questionItem = {content: dataArray[i], isLeft: false, id: i, isSelected: false}
+                questionItem = {content: dataArray[i], isLeft: false, id: i, isSelected: false, isSubmitted: false}
+            }
+            if (rawQuestions[i] !== data.CorrectAnswer) {
+                console.log("initialize questionItem.isCorrectAnswer" + false);
+                questionItem.isCorrectAnswer = false;
+            } else {
+                console.log("initialize questionItem.isCorrectAnswer" + true);
+                questionItem.isCorrectAnswer = true;
             }
             questions.push(questionItem);
         }
-        var rawQuestions = data.Display1RawValue.split('|');
         return ({
             description: data.DescriptionText,
             questions: questions,
@@ -153,42 +175,44 @@
             rawQuestions: rawQuestions
         });
     }
-    var data = initializeData(dataSource);
-    console.log("data: " + JSON.stringify(data));
+    var modifiedData = initializeData(dataSource);
+    console.log("data: " + JSON.stringify(modifiedData));
     var app = new Vue({
         el: '#app',
         data: {
-            description: data.description,
-            questions: data.questions,
-            correctAnswer: data.correctAnswer,
-            rawQuestions: data.rawQuestions,
+            description: modifiedData.description,
+            questions: modifiedData.questions,
+            correctAnswer: modifiedData.correctAnswer,
+            rawQuestions: modifiedData.rawQuestions,
             studentAnswer: "",
             isCorrectAnswer: false,
             hasFilledOut: false
         },
         methods: {
             selectItem: function (id) {
-                for (var i = 0; i < data.questions.length; i++) {
+                for (var i = 0; i < this.questions.length; i++) {
                     if (i !== id) {
-                        data.questions[i].isSelected = false;
+                        this.questions[i].isSelected = false;
                     }
                 }
-                data.questions[id].isSelected = !data.questions[id].isSelected;
+                this.questions[id].isSelected = !this.questions[id].isSelected;
                 console.log('click item' + id);
             },
             submitAnswers: function () {
                 console.log("submitAnswers");
-                var hasFilledOut = false;
-                for (var i = 0; i < data.questions.length; i++) {
-                    if (data.questions[i].isSelected) {
-                        hasFilledOut = true;
-                        data.studentAnswer = data.rawQuestions[i];
-                        data.isCorrectAnswer = data.studentAnswer === data.correctAnswer;
-                        console.log('studentAnswer: ' + data.studentAnswer, 'isCorrectAnswer: ' + data.isCorrectAnswer);
+                var hasFilledOutSign = false;
+                for (var i = 0; i < this.questions.length; i++) {
+                    if (this.questions[i].isSelected) {
+                        hasFilledOutSign = true;
+                        this.studentAnswer = this.rawQuestions[i];
+                        this.isCorrectAnswer = this.studentAnswer === this.correctAnswer;
+                        this.questions[i].isSubmitted = true;
+                        console.log('studentAnswer: ' + this.studentAnswer, 'isCorrectAnswer: ' + this.isCorrectAnswer);
                     }
                 }
-                data.hasFilledOut = hasFilledOut;
-                if (!data.hasFilledOut) {
+                this.hasFilledOut = hasFilledOutSign;
+                console.log('hasFilledOut ' + this.hasFilledOut);
+                if (!this.hasFilledOut) {
                     alert("You haven't filled out all answers!");
                 }
             }
