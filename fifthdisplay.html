@@ -18,6 +18,7 @@
     MathJax.Hub.Config({
         tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
     });
+
     </script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
     </script>
@@ -32,16 +33,18 @@
     </section>
     <section class="answer">
         <div class="item">
-            <button>{{answers[currentDisplayIndex].displayValue}}</button>
+            <button draggable="true" @dragstart="drag($event)">{{answers[currentDisplayIndex].displayValue}}</button>
         </div>
     </section>
     <section class="questions">
-        <div class="item" v-for="question in questions">
+        <div class="item" v-for="question in questions" @drop="drop($event)" @dragover="allowDrop($event)">
             <button>{{question.displayValue}}</button>
         </div>
     </section>
 </article>
 <script>
+    var dom = null;
+
     var dataSource = {
         CorrectAnswer: ">1/2|<1/2|1/2",
         DescriptionText: "Drop each fraction in the right circle!",
@@ -99,6 +102,16 @@
         methods: {
             moveIntoNextQuestion: function () {
                 this.currentDisplayIndex++;
+            },
+            drag: function (event) {
+                dom = event.currentTarget
+            },
+            drop: function (event) {
+                event.preventDefault();
+                event.target.appendChild(dom);
+            },
+            allowDrop: function (event) {
+                event.preventDefault();
             }
         }
     })
