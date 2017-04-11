@@ -6,10 +6,6 @@
     <meta content="telephone=no" name="format-detection"/>
     <title>Display 4</title>
     <style>
-        html {
-            overflow: hidden;
-        }
-
         body {
             margin: 0;
             background-color: #eeeeee;
@@ -19,21 +15,24 @@
             box-sizing: border-box;
         }
 
+        article.container {
+        }
+
         article.container section.content {
             background-color: #5aaf4b;
-            padding-left: 20%;
         }
 
         article.container section.content .item {
+            position: relative;
+            left: 20%;
             font-size: x-large;
             font-weight: bold;
             display: inline-block;
             background-color: #5aaf4b;
             color: #eeeeee;
             width: 20%;
-            height: 6rem;
+            height: 80px;
             border: none;
-            vertical-align: top;
         }
 
         /*article.container {*/
