@@ -16,16 +16,17 @@
         }
 
         article.container {
+            background-color: #5aaf4b;
         }
 
         article.container section.content {
+            position: relative;
             height: 80px;
-            background-color: #5aaf4b;
+            left: 20%;
         }
 
         article.container section.content .item {
             position: relative;
-            left: 20%;
             bottom: 15px;
             font-size: x-large;
             font-weight: bold;
@@ -54,6 +55,7 @@
         tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
     });
 
+
     </script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
     </script>
@@ -65,7 +67,7 @@
 <article class="container" id="app">
     <section class="content">
         <button class="item">{{leftString}}</button>
-        <button class="item">=</button>
+        <button class="item" style="margin-left: auto; margin-right: auto">=</button>
         <button class="item">{{rightString}}</button>
     </section>
 </article>
