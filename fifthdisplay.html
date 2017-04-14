@@ -14,25 +14,81 @@
             box-sizing: border-box;
         }
 
+        article.container {
+        }
+
+        article.container section.title {
+            border-radius: 3px;
+            background-color: #ffffff;
+            box-shadow: 0 0 2px #9ba0b1;
+        }
+
+        article.container section.content {
+            position: relative;
+            left: 20%;
+            width: 60%;
+            height: auto;
+        }
+
+        article.container section.content section.answer div.item {
+            background-color: #ff7247;
+            color: #ffffff;
+            width: 100%;
+            height: 6.5rem;
+        }
+
         button {
-            width: 4rem;
-            height: 6rem;
-            background-color: yellow;
+            width: 100%;
+            height: 100%;
         }
 
-        .drop-active {
-            border: dashed red 3px;
+        .item {
+            margin-top: 1rem;
+            font-size: x-large;
+            font-weight: bold;
+            border: 1px solid #9ba0b1;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #9ba0b1;
         }
 
-        .drop-target {
-            background-color: aqua;
+        article.container section.content section.questions div.item {
+            width: 100%;
+            height: 6.5rem;
+            color: darkgreen;
+            background-color: transparent;
+            border: solid darkgreen 3px;
+        }
+
+        article.container section.content section.questions div.item.drop-active {
+            border: dashed darkgreen 3px;
+        }
+
+        article.container section.content section.questions div.item.drop-target {
+            background-color: lawngreen;
+        }
+
+        .dragging {
+            opacity: 0.3;
+            z-index: 100;
+        }
+
+        .dropped {
+            opacity: 1;
+            z-index: 100;
+        }
+
+        .visible {
+            visibility: visible!important;
+        }
+
+        .invisible {
+            visibility: hidden!important;
         }
     </style>
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
     });
-
 
     </script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
@@ -49,13 +105,13 @@
     </section>
     <section class="content">
         <section class="answer">
-            <div class="item">
-                <button class="draggable">{{answers[currentDisplayIndex].displayValue}}</button>
+            <div class="item draggable">
+                {{answers[currentDisplayIndex].displayValue}}
             </div>
         </section>
         <section class="questions">
             <div class="item dropzone" v-for="question in questions">
-                <button>{{question.displayValue}}</button>
+                {{question.displayValue}}
             </div>
         </section>
     </section>
@@ -72,7 +128,7 @@
             restrict: {
                 restriction: ".content",
                 endOnly: true,
-                elementRect: {top: 0, left: 0, bottom: 1, right: 1}
+                elementRect: {top: 0, left: 0, bottom: 0, right: 0}
             },
             // call this function on every dragmove event
             onmove: function (event) {
@@ -80,6 +136,8 @@
                     // keep the dragged position in the data-x/data-y attributes
                     x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
                     y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                target.classList.add('dragging');
 
                 // translate the element
                 target.style.webkitTransform =
@@ -95,6 +153,7 @@
                 console.log('moved a distance of '
                     + (Math.sqrt(event.dx * event.dx +
                         event.dy * event.dy) | 0) + 'px');
+                event.target.classList.remove('dragging')
             }
         });
 
@@ -108,28 +167,22 @@
         // listen for drop related events:
 
         ondropactivate: function (event) {
-            // add active dropzone feedback
-//            event.target.innerHTML = "drop in";
             event.target.classList.add('drop-active');
         },
         ondragenter: function (event) {
             var draggableElement = event.relatedTarget,
                 dropzoneElement = event.target;
-
-            // feedback the possibility of a drop
-//            dropzoneElement.classList.add('drop-target');
-//            draggableElement.classList.add('can-drop');
-            draggableElement.innerHTML = 'Dragged in';
             dropzoneElement.classList.add('drop-target');
         },
         ondragleave: function (event) {
             // remove the drop feedback style
             event.target.classList.remove('drop-target');
-//            event.relatedTarget.classList.remove('can-drop');
-            event.relatedTarget.innerHTML = 'Dragged out';
         },
         ondrop: function (event) {
-            event.relatedTarget.innerHTML = 'Dropped';
+            event.target.classList.add('invisible');
+            event.relatedTarget.classList.add('dropped');
+            //event.target.innerHTML = event.relatedTarget;
+            //event.relatedTarget.innerHTML = 'Dropped';
         },
         ondropdeactivate: function (event) {
             // remove active dropzone feedback
@@ -150,6 +203,7 @@
         var updatedData = initializeData(data);
         app.$data.answers = updatedData.answers;
         app.$data.questions = updatedData.questions;
+        app.$data.description = updatedData.description;
     }
 
     function sendMessageToNative(message) {

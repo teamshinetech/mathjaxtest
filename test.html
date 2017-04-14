@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<body>
+<article class="container" id="app">
+    <section class="title">
+        <p>{{description}}</p>
+    </section>
+    <section class="content">
+        <section class="answer">
+            <div class="item">
+                <button class="draggable">{{answers[currentDisplayIndex].displayValue}}</button>
+            </div>
+        </section>
+        <section class="questions">
+            <div class="item dropzone" v-for="question in questions">
+                <button>{{question.displayValue}}</button>
+            </div>
+        </section>
+    </section>
+</article>
+</body>
+</html>
