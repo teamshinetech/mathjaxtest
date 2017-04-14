@@ -148,10 +148,10 @@
     };
     function updateData(data) {
         var updatedData = initializeData(data);
-        app.$data.description = updatedData.description;
-        app.$data.questions = updatedData.questions;
-        app.$data.correctAnswer = updatedData.correctAnswer;
-        app.$data.rawQuestions = updatedData.rawQuestions;
+        app.description = updatedData.description;
+        app.questions = updatedData.questions;
+        app.correctAnswer = updatedData.correctAnswer;
+        app.rawQuestions = updatedData.rawQuestions;
     }
 
     function sendMessageToNative(message){

@@ -110,7 +110,7 @@
             </div>
         </section>
         <section class="questions">
-            <div class="item dropzone" v-for="question in questions">
+            <div class="item dropzone" v-for="(question, index) in questions" :id="index" :key="index">
                 {{question.displayValue}}
             </div>
         </section>
@@ -181,6 +181,8 @@
         ondrop: function (event) {
             event.target.classList.add('invisible');
             event.relatedTarget.classList.add('dropped');
+            app.droppedOneAnswer(event.target.id);
+            console.log('dropped answer id: ' + event.target.id);
             //event.target.innerHTML = event.relatedTarget;
             //event.relatedTarget.innerHTML = 'Dropped';
         },
@@ -201,9 +203,9 @@
 
     function updateData(data) {
         var updatedData = initializeData(data);
-        app.$data.answers = updatedData.answers;
-        app.$data.questions = updatedData.questions;
-        app.$data.description = updatedData.description;
+        app.answers = updatedData.answers;
+        app.questions = updatedData.questions;
+        app.description = updatedData.description;
     }
 
     function sendMessageToNative(message) {
@@ -249,6 +251,9 @@
         methods: {
             moveIntoNextQuestion: function () {
                 this.currentDisplayIndex++;
+            },
+            droppedOneAnswer: function (answerIndex) {
+                
             }
         }
     })
