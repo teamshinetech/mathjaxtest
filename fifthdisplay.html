@@ -227,6 +227,10 @@
         app.answers = updatedData.answers;
         app.questions = updatedData.questions;
         app.description = updatedData.description;
+        app.$nextTick(function () {
+//            MathJax.Hub.Typeset();
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        });
     }
 
     function sendMessageToNative(message) {
@@ -266,16 +270,16 @@
             questions: questions
         })
     }
-    var modifiedData = initializeData(dataSource);
-    console.log("data " + JSON.stringify(modifiedData));
+    //    var modifiedData = initializeData(dataSource);
+    //    console.log("data " + JSON.stringify(modifiedData));
     var app = new Vue({
         el: '#app',
         data: {
             currentDisplayIndex: 0,
             currentSelectedAnswerIndex: -1,
-            answers: modifiedData.answers,
-            questions: modifiedData.questions,
-            description: modifiedData.description,
+            answers: [],
+            questions: [],
+            description: "",
             studentAnswer: "",
             isCorrectAnswer: false,
             hasStarted: false,

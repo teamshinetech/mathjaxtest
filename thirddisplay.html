@@ -114,6 +114,7 @@
     MathJax.Hub.Config({
         tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
     });
+
     </script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
     </script>
@@ -146,18 +147,23 @@
         DescriptionText: "Which of these <font color=red>doesn't</font> equal or represent <font color=green>half</font>?",
         Display1RawValue: "50/100|72/144|50%|10/5|35/70|0.5"
     };
+
     function updateData(data) {
         var updatedData = initializeData(data);
         app.description = updatedData.description;
         app.questions = updatedData.questions;
         app.correctAnswer = updatedData.correctAnswer;
         app.rawQuestions = updatedData.rawQuestions;
+        app.$nextTick(function () {
+//            MathJax.Hub.Typeset();
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        });
     }
 
-    function sendMessageToNative(message){
-        try{
+    function sendMessageToNative(message) {
+        try {
             window.webkit.messageHandlers.submit.postMessage(message);
-        }catch (ex){
+        } catch (ex) {
             throw Error(ex);
         }
     }
@@ -190,15 +196,15 @@
             rawQuestions: rawQuestions
         });
     }
-    var modifiedData = initializeData(dataSource);
-    console.log("data: " + JSON.stringify(modifiedData));
+    //    var modifiedData = initializeData(dataSource);
+    //    console.log("data: " + JSON.stringify(modifiedData));
     var app = new Vue({
         el: '#app',
         data: {
-            description: modifiedData.description,
-            questions: modifiedData.questions,
-            correctAnswer: modifiedData.correctAnswer,
-            rawQuestions: modifiedData.rawQuestions,
+            description: "",
+            questions: [],
+            correctAnswer: "",
+            rawQuestions: [],
             studentAnswer: "",
             isCorrectAnswer: false,
             hasFilledOut: false
@@ -222,7 +228,11 @@
                         this.studentAnswer = this.rawQuestions[i];
                         this.isCorrectAnswer = this.studentAnswer === this.correctAnswer;
                         this.questions[i].isSubmitted = true;
-                        sendMessageToNative({hasFilledOut: true, studentAnswer: this.studentAnswer, isCorrectAnswer: this.isCorrectAnswer});
+                        sendMessageToNative({
+                            hasFilledOut: true,
+                            studentAnswer: this.studentAnswer,
+                            isCorrectAnswer: this.isCorrectAnswer
+                        });
                         console.log('studentAnswer: ' + this.studentAnswer, 'isCorrectAnswer: ' + this.isCorrectAnswer);
                     }
                 }
