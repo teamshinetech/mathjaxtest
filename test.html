@@ -1,8 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="telephone=no" name="format-detection"/>
+    <title>Display 5</title>
+    <style>
+        body {
+            background-color: #eeeeee;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        article.container {
+        }
+
+        article.container section.title {
+            border-radius: 3px;
+            background-color: #ffffff;
+            box-shadow: 0 0 2px #9ba0b1;
+        }
+
+        article.container section.content {
+            position: relative;
+            left: 20%;
+            width: 60%;
+            height: auto;
+        }
+
+        article.container section.content section.answer div.item {
+            background-color: #ff7247;
+            color: #ffffff;
+            width: 100%;
+            height: 6.5rem;
+        }
+
+        button {
+            width: 100%;
+            height: 100%;
+        }
+
+        .item {
+            margin-top: 1rem;
+            font-size: x-large;
+            font-weight: bold;
+            border: 1px solid #9ba0b1;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #9ba0b1;
+        }
+
+        article.container section.content section.questions div.item {
+            width: 100%;
+            height: 6.5rem;
+            color: darkgreen;
+            background-color: transparent;
+            border: solid darkgreen 3px;
+        }
+
+        article.container section.content section.questions div.item.drop-active {
+            border: dashed darkgreen 3px;
+        }
+
+        article.container section.content section.questions div.item.drop-target {
+            background-color: lawngreen;
+        }
+
+        .dragging {
+            opacity: 0.3;
+            z-index: 100;
+        }
+
+        .dropped {
+            opacity: 1;
+            z-index: 100;
+        }
+
+        .visible {
+            visibility: visible !important;
+        }
+
+        .invisible {
+            visibility: hidden !important;
+        }
+    </style>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+    });
+
+
+
+
+
+    </script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
+    </script>
+    <script src="./vue.js"></script>
+    <script src="./interact.js"></script>
+    <!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+    <!--<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>-->
 </head>
 <body>
 <article class="container" id="app">
@@ -11,16 +109,170 @@
     </section>
     <section class="content">
         <section class="answer">
-            <div class="item">
-                <button class="draggable">{{answers[currentDisplayIndex].displayValue}}</button>
+            <div class="item draggable">
+                {{answers[currentDisplayIndex].displayValue}}
             </div>
         </section>
         <section class="questions">
-            <div class="item dropzone" v-for="question in questions">
-                <button>{{question.displayValue}}</button>
+            <div class="item dropzone" v-for="(question, index) in questions" :id="index" :key="index">
+                {{question.displayValue}}
             </div>
         </section>
     </section>
 </article>
+<script>
+    // target elements with the "draggable" class
+    interact('.draggable')
+        .draggable({
+            // enable inertial throwing
+            inertia: true,
+            // enable autoScroll
+            autoScroll: true,
+            // keep the element within the area of it's parent
+            restrict: {
+                restriction: ".content",
+                endOnly: true,
+                elementRect: {top: 0, left: 0, bottom: 0, right: 0}
+            },
+            // call this function on every dragmove event
+            onmove: function (event) {
+                var target = event.target,
+                    // keep the dragged position in the data-x/data-y attributes
+                    x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+                    y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                target.classList.add('dragging');
+
+                // translate the element
+                target.style.webkitTransform =
+                    target.style.transform =
+                        'translate(' + x + 'px, ' + y + 'px)';
+
+                // update the posiion attributes
+                target.setAttribute('data-x', x);
+                target.setAttribute('data-y', y);
+            },
+            // call this function on every dragend event
+            onend: function (event) {
+                console.log('moved a distance of '
+                    + (Math.sqrt(event.dx * event.dx +
+                        event.dy * event.dy) | 0) + 'px');
+                event.target.classList.remove('dragging')
+            }
+        });
+
+    // enable draggables to be dropped into this
+    interact('.dropzone').dropzone({
+        // only accept elements matching this CSS selector
+        accept: '.draggable',
+        // Require a 75% element overlap for a drop to be possible
+        overlap: 0.75,
+
+        // listen for drop related events:
+
+        ondropactivate: function (event) {
+            event.target.classList.add('drop-active');
+        },
+        ondragenter: function (event) {
+            var draggableElement = event.relatedTarget,
+                dropzoneElement = event.target;
+            dropzoneElement.classList.add('drop-target');
+        },
+        ondragleave: function (event) {
+            // remove the drop feedback style
+            event.target.classList.remove('drop-target');
+        },
+        ondrop: function (event) {
+            event.target.classList.add('invisible');
+            event.relatedTarget.classList.add('dropped');
+            app.droppedOneAnswer(event.target.id);
+            console.log('dropped answer id: ' + event.target.id);
+            //event.target.innerHTML = event.relatedTarget;
+            //event.relatedTarget.innerHTML = 'Dropped';
+        },
+        ondropdeactivate: function (event) {
+            // remove active dropzone feedback
+            event.target.classList.remove('drop-active');
+            event.target.classList.remove('drop-target');
+        }
+    });
+
+    var dataSource = {
+        CorrectAnswer: ">1/2|<1/2|1/2",
+        DescriptionText: "Drop each fraction in the right circle!",
+        Display1: "$${7 \over 12}$$|$${6 \over 14}$$|$${8 \over 16}$$",
+        Display2: "$$< {1 \over 2}$$|$$> {1 \over 2}$$|$${1 \over 2}$$",
+        Display2RawValue: "<1/2|>1/2|1/2"
+    };
+
+    function updateData(data) {
+        var updatedData = initializeData(data);
+        app.answers = updatedData.answers;
+        app.questions = updatedData.questions;
+        app.description = updatedData.description;
+    }
+
+    function sendMessageToNative(message) {
+        try {
+            window.webkit.messageHandlers.submit.postMessage(message);
+        } catch (ex) {
+            console.warn(ex.message);
+        }
+    }
+
+    function initializeData(data) {
+        var transferredDisplay1 = data.Display1.replace(/\\*over/g, '\\over');
+        var transferredDisplay2 = data.Display2.replace(/\\*over/g, '\\over');
+        var display1StringArray = transferredDisplay1.split('|');
+        var display2StringArray = transferredDisplay2.split('|');
+        var correctAnswers = data.CorrectAnswer.split('|');
+        var display2RawValueArray = data.Display2RawValue.split('|');
+        var answers = [];
+        var questions = [];
+        for (var i = 0; i < correctAnswers.length; i++) {
+            var answerItem = {displayValue: display1StringArray[i], correctValue: correctAnswers[i]};
+            var questionItem = {displayValue: display2StringArray[i], rawValue: display2RawValueArray[i]};
+            answers.push(answerItem);
+            questions.push(questionItem);
+        }
+        return ({
+            description: data.DescriptionText,
+            answers: answers,
+            questions: questions
+        })
+    }
+    var modifiedData = initializeData(dataSource);
+    console.log("data " + JSON.stringify(modifiedData));
+    var app = new Vue({
+        el: '#app',
+        data: {
+            currentDisplayIndex: 0,
+            answers: modifiedData.answers,
+            questions: modifiedData.questions,
+            description: modifiedData.description,
+            studentAnswer: "",
+            isCorrectAnswer: false,
+            hasFilledOut: false
+        },
+        methods: {
+            moveIntoNextQuestion: function () {
+                this.currentDisplayIndex++;
+            },
+            droppedOneAnswer: function (answerIndex) {
+                this.hasFilledOut = this.currentDisplayIndex === (this.answers.length - 1);
+                console.log('dropped one answer.');
+                var currentAnswer = this.questions[answerIndex].rawValue;
+                var currentCorrectAnswer = this.answers[this.currentDisplayIndex];
+                this.studentAnswer += currentAnswer;
+                this.isCorrectAnswer = currentAnswer === currentCorrectAnswer;
+                sendMessageToNative({
+                    hasFilledOut: this.hasFilledOut,
+                    studentAnswer: this.studentAnswer,
+                    isCorrectAnswer: this.isCorrectAnswer
+                })
+            }
+        }
+    })
+</script>
 </body>
 </html>

@@ -59,12 +59,20 @@
             border: solid darkgreen 3px;
         }
 
+        article.container section.content section.questions div.item.rightSelected {
+            background-color: green;
+        }
+
+        article.container section.content section.questions div.item.wrongSelected {
+            background-color: red;
+        }
+
         article.container section.content section.questions div.item.drop-active {
             border: dashed darkgreen 3px;
         }
 
         article.container section.content section.questions div.item.drop-target {
-            background-color: lawngreen;
+            /*background-color: lawngreen;*/
         }
 
         .dragging {
@@ -78,11 +86,19 @@
         }
 
         .visible {
-            visibility: visible!important;
+            visibility: visible !important;
         }
 
         .invisible {
-            visibility: hidden!important;
+            visibility: hidden !important;
+        }
+
+        .added {
+            display: block !important;
+        }
+
+        .removed {
+            display: none !important;
         }
     </style>
     <script type="text/x-mathjax-config">
@@ -105,12 +121,14 @@
     </section>
     <section class="content">
         <section class="answer">
-            <div class="item draggable">
-                {{answers[currentDisplayIndex].displayValue}}
+            <div v-for="(answer, index) in answers" class="item draggable"
+                 :class="{'added' : currentDisplayIndex === index, 'removed' : currentDisplayIndex !== index}">
+                {{answer.displayValue}}
             </div>
         </section>
         <section class="questions">
-            <div class="item dropzone" v-for="(question, index) in questions" :id="index" :key="index">
+            <div class="item dropzone" v-for="(question, index) in questions" :id="index" :key="index"
+                 :class="{'rightSelected': question.isSelectedAndRight, 'wrongSelected': question.isSelectedAndWrong}">
                 {{question.displayValue}}
             </div>
         </section>
@@ -153,7 +171,7 @@
                 console.log('moved a distance of '
                     + (Math.sqrt(event.dx * event.dx +
                         event.dy * event.dy) | 0) + 'px');
-                event.target.classList.remove('dragging')
+//                event.target.classList.remove('dragging')
             }
         });
 
@@ -167,6 +185,7 @@
         // listen for drop related events:
 
         ondropactivate: function (event) {
+            app.resetDroppedItem();
             event.target.classList.add('drop-active');
         },
         ondragenter: function (event) {
@@ -179,10 +198,12 @@
             event.target.classList.remove('drop-target');
         },
         ondrop: function (event) {
-            event.target.classList.add('invisible');
-            event.relatedTarget.classList.add('dropped');
-            app.droppedOneAnswer(event.target.id);
-            console.log('dropped answer id: ' + event.target.id);
+//            event.target.classList.add('invisible');
+//            event.relatedTarget.classList.add('dropped');
+            var droppedIndex = event.target.id;
+            var draggingIndex = event.relatedTarget.id;
+            app.droppedOneAnswer(droppedIndex, draggingIndex);
+            console.log('dropped question id: ' + droppedIndex, 'dragging answer id: ' + draggingIndex);
             //event.target.innerHTML = event.relatedTarget;
             //event.relatedTarget.innerHTML = 'Dropped';
         },
@@ -212,7 +233,7 @@
         try {
             window.webkit.messageHandlers.submit.postMessage(message);
         } catch (ex) {
-            throw Error(ex);
+            console.warn(ex.message);
         }
     }
 
@@ -226,8 +247,16 @@
         var answers = [];
         var questions = [];
         for (var i = 0; i < correctAnswers.length; i++) {
-            var answerItem = {displayValue: display1StringArray[i], correctValue: correctAnswers[i]};
-            var questionItem = {displayValue: display2StringArray[i], rawValue: display2RawValueArray[i]};
+            var answerItem = {
+                displayValue: display1StringArray[i],
+                correctValue: correctAnswers[i]
+            };
+            var questionItem = {
+                displayValue: display2StringArray[i],
+                rawValue: display2RawValueArray[i],
+                isSelectedAndRight: false,
+                isSelectedAndWrong: false
+            };
             answers.push(answerItem);
             questions.push(questionItem);
         }
@@ -243,17 +272,48 @@
         el: '#app',
         data: {
             currentDisplayIndex: 0,
-            hasFilledOut: false,
+            currentSelectedAnswerIndex: -1,
             answers: modifiedData.answers,
             questions: modifiedData.questions,
-            description: modifiedData.description
+            description: modifiedData.description,
+            studentAnswer: "",
+            isCorrectAnswer: false,
+            hasStarted: false,
+            hasFilledOut: false
         },
         methods: {
-            moveIntoNextQuestion: function () {
+            resetDroppedItem: function () {
+                for (var i = 0; i < this.questions.length; i++) {
+                    this.questions[i].isSelectedAndRight = false;
+                    this.questions[i].isSelectedAndWrong = false;
+                }
+            },
+            moveToNextQuestion: function () {
                 this.currentDisplayIndex++;
             },
-            droppedOneAnswer: function (answerIndex) {
-                
+            droppedOneAnswer: function (droppedIndex, draggingIndex) {
+                this.hasStarted = true;
+                this.hasFilledOut = this.currentDisplayIndex === (this.answers.length - 1);
+                console.log('dropped one answer.');
+                var currentAnswer = this.questions[droppedIndex].rawValue;
+                var currentCorrectAnswer = this.answers[this.currentDisplayIndex].correctValue;
+                this.studentAnswer = currentAnswer;
+                this.isCorrectAnswer = currentAnswer === currentCorrectAnswer;
+                var message = {
+                    hasFilledOut: this.hasFilledOut,
+                    studentAnswer: this.studentAnswer,
+                    isCorrectAnswer: this.isCorrectAnswer
+                };
+                console.log('message: ' + JSON.stringify(message));
+                sendMessageToNative(message);
+                if (this.isCorrectAnswer) {
+                    this.questions[droppedIndex].isSelectedAndRight = true;
+                    this.questions[droppedIndex].isSelectedAndWrong = false;
+                    this.moveToNextQuestion();
+                } else {
+                    this.questions[droppedIndex].isSelectedAndWrong = true;
+                    this.questions[droppedIndex].isSelectedAndRight = false;
+                }
             }
         }
     })
