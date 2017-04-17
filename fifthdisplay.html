@@ -301,7 +301,7 @@
                 console.log('dropped one answer.');
                 var currentAnswer = this.questions[droppedIndex].rawValue;
                 var currentCorrectAnswer = this.answers[this.currentDisplayIndex].correctValue;
-                this.studentAnswer = currentAnswer;
+                this.studentAnswer += currentAnswer;
                 this.isCorrectAnswer = currentAnswer === currentCorrectAnswer;
                 var message = {
                     hasFilledOut: this.hasFilledOut,
