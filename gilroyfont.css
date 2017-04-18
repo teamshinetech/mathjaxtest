@@ -1,0 +1,6 @@
+@font-face {
+    font-family: 'Gilroy';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Gilroy Light'), local('Gilroy-Light'), url(fonts/Gilroy-Light.woff) format('woff');
+}
