@@ -26,41 +26,39 @@
         }
 
         article.container section.content {
-            position: relative;
+            display: flex;
+            justify-content: space-around;
             height: 80px;
-            left: 10%;
         }
 
         article.container section.content .item {
-            position: relative;
-            bottom: 15px;
             font-size: x-large;
             font-weight: bold;
-            display: inline-block;
             background-color: transparent;
             color: #eeeeee;
             width: 20%;
             border: none;
-            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        /*article.container {*/
-        /*margin-left: 10%;*/
-        /*margin-right: 10%;*/
-        /*}*/
+        article.container section.content .item.signal {
+            flex-direction: row;
+        }
 
-        /*article.container section.content {*/
-        /*background-color: #5aaf4b;*/
-        /*color: #eeeeee;*/
-        /*height: 5rem;*/
-        /*}*/
+        article.container section.content .item .mn {
+            font-size: x-large!important;
+        }
+
+        article.container section.content .item .mi {
+            font-size: x-large!important;
+        }
     </style>
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
     });
-
-
     </script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full">
     </script>
@@ -72,7 +70,7 @@
 <article class="container" id="app">
     <section class="content">
         <button class="item">{{leftString}}</button>
-        <button class="item" style="margin-left: 20px; margin-right: auto">=</button>
+        <button class="item signal">=</button>
         <button class="item">{{rightString}}</button>
     </section>
 </article>
