@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta content="telephone=no" name="format-detection"/>
     <title>Display 5</title>
-    <link rel="stylesheet" href="./gilroyfont.css">
+    <link rel="stylesheet" href="./gilroyfont.css"/>
     <style>
         html {
             font-family: Gilroy;
@@ -246,6 +246,7 @@
     function sendMessageToNative(message) {
         try {
             window.webkit.messageHandlers.submit.postMessage(message);
+            displayFive.postMessage(JSON.stringify(message));
         } catch (ex) {
             console.warn(ex.message);
         }
