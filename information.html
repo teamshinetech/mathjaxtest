@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <title>Display 4</title>
+    <link rel="stylesheet" href="./gilroyfont.css"/>
+    <style>
+        html {
+            font-family: Gilroy;
+            font-style: normal;
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #eeeeee;
+            border: none;
+            height: 100%;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        article.container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        article.container header {
+            margin-top: 2rem;
+        }
+
+        article.container header h1 {
+            height: 1rem;
+        }
+
+        article.container header div.img-container {
+            /*display: flex;*/
+            /*flex-direction: row;*/
+            /*justify-content: center;*/
+            width: 3rem;
+        }
+
+        article.container header div.img-container img {
+            width: 100%;
+            height: 100%;
+        }
+
+        article.container section.content.style1 {
+            background-image: url("./images/DYK_BACK.PNG");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        article.container section.content {
+            flex: 1;
+        }
+    </style>
+    <script src="./vue.js"></script>
+    <!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+    <!--<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>-->
+</head>
+<body>
+<article class="container" id="app">
+    <header>
+        <div class="img-container"><img :src="titleImage" alt="titleImage"/></div>
+        <h1>{{title}}</h1>
+    </header>
+    <section class="content" :class="type">
+        <div><p v-html="content"></p></div>
+        <button>GOT IT!</button>
+    </section>
+</article>
+<script>
+    var dataSource = {
+        ActivityID: 15,
+        Name: "Information about Egyptian fractions",
+        DescriptionText: "Did you know?",
+        Rank: 3,
+        DisplayMethod: 100,
+        Display1: "Ancient Egyptians are credited with inventing fractions! In 1800 BC, they developed a number system using symbols like flowers, loops, and coils to represnet pwoers of ten (1, 10, 100, etc.) <br>No one can <i>invent</i> a part of a whole, but the Egyptians were the first known people to use them, likely to keep track of property taxes.",
+        Display2: 1
+    };
+
+    var titleImageAddresses = [
+        "./images/DYK_QUEST.PNG",
+        "./images/FUND_LIGHT.PNG",
+        "./images/LESSON_PENC.PNG"
+    ];
+
+    var backgroundImageAddress = [
+        "./images/DYK_BACK.PNG",
+        "./images/FUND_BACK.PNG",
+        "./images/LESSON_BACK.PNG"
+    ];
+
+    function updateData(data) {
+        var updatedData = initializeData(data);
+        console.log("updatedData" + JSON.stringify(updatedData));
+        app.title = updatedData.title;
+        app.content = updatedData.content;
+        app.titleImage = updatedData.titleImage;
+        app.backgroundImage = updatedData.backgroundImage;
+        app.type = updatedData.type;
+    }
+
+    function initializeData(data) {
+        var imageAddress = data.Display2 - 1;
+        var type = "style" + data.Display2;
+        return ({
+            title: data.DescriptionText,
+            content: data.Display1,
+            titleImage: titleImageAddresses[imageAddress],
+            backgroundImage: backgroundImageAddress[imageAddress],
+            type: type
+        })
+    }
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            title: "",
+            content: "",
+            titleImage: "",
+            backgroundImage: "",
+            type: ""
+        }
+    });
+
+    updateData(dataSource);
+</script>
+</body>
+</html>
