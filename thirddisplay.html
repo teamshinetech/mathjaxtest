@@ -31,10 +31,8 @@
         }
 
         article.container section.title p {
-            margin: 0;
-        }
-
-        article.container section.title p {
+            font-weight: 500;
+            text-align: center;
             margin: 0;
         }
 
@@ -55,7 +53,7 @@
         article.container section.content .item button {
             font-family: Gilroy;
             font-size: large;
-            font-weight: bold;
+            font-weight: 900;
             background-color: #ff7247;
             color: #ffffff;
             border: 1px solid #9ba0b1;
@@ -84,7 +82,7 @@
             width: 40%;
             font-family: Gilroy;
             font-size: x-large;
-            font-weight: bold;
+            font-weight: 900;
             background-color: #ff7247;
             color: #ffffff;
             margin-bottom: 1rem;
@@ -145,7 +143,7 @@
     </section>
     <section class="content">
         <div v-for="question in questions" class="mask item"
-             v-bind:class="{'left' : question.isLeft, 'right': !question.isLeft, 'selected' : question.isSelected, 'activated': question.isSubmitted}">
+             v-bind:class="{'left' : question.isLeft, 'right': !question.isLeft, 'selected' : question.isSelected}">
             <button @click="selectItem(question.id)">
                 {{question.content}}
             </button>

@@ -29,6 +29,20 @@
 @font-face {
     font-family: 'Gilroy';
     font-style: normal;
+    font-weight: 500;
+    src: local('Gilroy Medium'), local('Gilroy-Medium'), url(./fonts/Gilroy-Medium.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Gilroy';
+    font-style: italic;
+    font-weight: 500;
+    src: local('Gilroy MediumItalic'), local('Gilroy-Italic'), url(./fonts/Gilroy-MediumItalic.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Gilroy';
+    font-style: normal;
     font-weight: 700;
     src: local('Gilroy Bold'), local('Gilroy-Bold'), url(./fonts/Gilroy-Bold.woff) format('woff');
 }
