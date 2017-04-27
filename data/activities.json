@@ -14,7 +14,7 @@
     "MessageCorrectAnswer": "Correct!",
     "MessageIncorrectAnswer": "Try again!",
     "ActivityAnswerAttempt": {
-      "ActivityAnswerAttemptId": 1893,
+      "ActivityAnswerAttemptId": 2055,
       "StudentAnswer": "Thousand|Million|Billion|Trillion",
       "IsCorrectAnswer": true
     }
@@ -34,7 +34,7 @@
     "MessageCorrectAnswer": "Awesome!",
     "MessageIncorrectAnswer": "Try again!",
     "ActivityAnswerAttempt": {
-      "ActivityAnswerAttemptId": 1894,
+      "ActivityAnswerAttemptId": 2056,
       "StudentAnswer": "4",
       "IsCorrectAnswer": true
     }
@@ -46,8 +46,8 @@
     "Rank": 3,
     "DisplayMethod": 100,
     "Display1": "Ancient Egyptians are credited with inventing fractions! In 1800 BC, they developed a number system using symbols like flowers, loops, and coils to represnet pwoers of ten (1, 10, 100, etc.) <br>No one can <i>invent</i> a part of a whole, but the Egyptians were the first known people to use them, likely to keep track of property taxes.",
-    "Display2": "/background/path/goes/here/",
-    "Display3": "/button/path/goes/here",
+    "Display2": "./images/DYK_QUEST.PNG|./images/DYK_QUEST.PNG",
+    "Display3": "1|GOT IT!",
     "Display1RawValue": null,
     "Display2RawValue": null,
     "CorrectAnswer": null,
@@ -70,7 +70,7 @@
     "MessageCorrectAnswer": "Great work!",
     "MessageIncorrectAnswer": "So close! Try again!",
     "ActivityAnswerAttempt": {
-      "ActivityAnswerAttemptId": 1895,
+      "ActivityAnswerAttemptId": 2057,
       "StudentAnswer": "10/5",
       "IsCorrectAnswer": true
     }
@@ -90,7 +90,7 @@
     "MessageCorrectAnswer": "Well done!",
     "MessageIncorrectAnswer": "Try again!",
     "ActivityAnswerAttempt": {
-      "ActivityAnswerAttemptId": 1896,
+      "ActivityAnswerAttemptId": 2058,
       "StudentAnswer": "12.83",
       "IsCorrectAnswer": true
     }
@@ -126,8 +126,8 @@
     "MessageCorrectAnswer": "Perfect!",
     "MessageIncorrectAnswer": "Try again!",
     "ActivityAnswerAttempt": {
-      "ActivityAnswerAttemptId": 1897,
-      "StudentAnswer": "1/2>1/2<1/21/2",
+      "ActivityAnswerAttemptId": 2059,
+      "StudentAnswer": ">1/2<1/21/2",
       "IsCorrectAnswer": true
     }
   },
@@ -146,7 +146,7 @@
     "MessageCorrectAnswer": "Great job!",
     "MessageIncorrectAnswer": "Try again!",
     "ActivityAnswerAttempt": {
-      "ActivityAnswerAttemptId": 1535,
+      "ActivityAnswerAttemptId": 2060,
       "StudentAnswer": "700|10 Million|70,000",
       "IsCorrectAnswer": true
     }

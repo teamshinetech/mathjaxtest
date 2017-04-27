@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta content="telephone=no" name="format-detection"/>
-    <title>Information</title>
+    <title>Display 4</title>
     <link rel="stylesheet" href="./gilroyfont.css"/>
     <style>
         html {
@@ -129,8 +129,8 @@
         Rank: 3,
         DisplayMethod: 100,
         Display1: "Ancient Egyptians are credited with inventing fractions! In 1800 BC, they developed a number system using symbols like flowers, loops, and coils to represnet pwoers of ten (1, 10, 100, etc.) <br>No one can <i>invent</i> a part of a whole, but the Egyptians were the first known people to use them, likely to keep track of property taxes.",
-        Display2: "/background/path/goes/here/",
-        Display3: "/button/path/goes/here"
+        Display2: "./images/DYK_QUEST.PNG|./images/DYK_QUEST.PNG",
+        Display3: "1|GOT IT!"
     };
 
     var titleImageAddresses = [
@@ -156,14 +156,20 @@
     }
 
     function initializeData(data) {
-        var Display2 = 1;
-        var imageAddress = Display2 - 1;
-        var type = "style" + Display2;
+        var Display2Array = dataSource.Display2.split("|");
+        var Display3Array = dataSource.Display3.split("|");
+        var ImageRootPath = ""; // root path for either iPhone or Android
+        var MyTitleImage = ImageRootPath + Display2Array[0];
+        var MyBackgroundImage = ImageRootPath + Display2Array[1];
+        var MyTypeNumber = Display3Array[0];
+        var MyButtonLabel = Display3Array[1];
+
+        var type = "style" + MyTypeNumber;
         return ({
             title: data.DescriptionText,
             content: data.Display1,
-            titleImage: titleImageAddresses[imageAddress],
-            backgroundImage: backgroundImageAddress[imageAddress],
+            titleImage: MyTitleImage,
+            backgroundImage: MyBackgroundImage,
             type: type
         })
     }
