@@ -118,7 +118,7 @@
     </header>
     <section class="content">
         <div><p v-html="content"></p></div>
-        <button>GOT IT!</button>
+        <button>{{buttonContent}}</button>
     </section>
 </article>
 <script>
@@ -129,7 +129,7 @@
         Rank: 3,
         DisplayMethod: 100,
         Display1: "Ancient Egyptians are credited with inventing fractions! In 1800 BC, they developed a number system using symbols like flowers, loops, and coils to represnet pwoers of ten (1, 10, 100, etc.) <br>No one can <i>invent</i> a part of a whole, but the Egyptians were the first known people to use them, likely to keep track of property taxes.",
-        Display2: "./images/DYK_QUEST.PNG|./images/DYK_QUEST.PNG",
+        Display2: "DYK_QUEST.PNG|DYK_BACK.PNG",
         Display3: "1|GOT IT!"
     };
 
@@ -152,13 +152,14 @@
         app.content = updatedData.content;
         app.titleImage = updatedData.titleImage;
         app.backgroundImage = updatedData.backgroundImage;
+        app.buttonContent = updatedData.buttonContent;
         app.type = updatedData.type;
     }
 
     function initializeData(data) {
-        var Display2Array = dataSource.Display2.split("|");
-        var Display3Array = dataSource.Display3.split("|");
-        var ImageRootPath = ""; // root path for either iPhone or Android
+        var Display2Array = data.Display2.split("|");
+        var Display3Array = data.Display3.split("|");
+        var ImageRootPath = "./images/"; // root path for either iPhone or Android
         var MyTitleImage = ImageRootPath + Display2Array[0];
         var MyBackgroundImage = ImageRootPath + Display2Array[1];
         var MyTypeNumber = Display3Array[0];
@@ -170,6 +171,7 @@
             content: data.Display1,
             titleImage: MyTitleImage,
             backgroundImage: MyBackgroundImage,
+            buttonContent: MyButtonLabel,
             type: type
         })
     }
@@ -181,6 +183,7 @@
             content: "",
             titleImage: "",
             backgroundImage: "",
+            buttonContent: "",
             type: ""
         }
     });
