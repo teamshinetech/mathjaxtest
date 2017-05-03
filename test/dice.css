@@ -1,18 +1,3 @@
-.zero-face {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    align-content: space-between;
-}
-
-.pip:nth-child(2) {
-    align-self: center;
-}
-
-.pip:nth-child(3) {
-    align-self: flex-end;
-}
-
 .first-face {
     display: flex;
     justify-content: center;
