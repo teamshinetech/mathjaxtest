@@ -1,0 +1,137 @@
+/*
+Flexbox dice by Landon Schropp
+http://davidwalsh.name/flexbox-dice
+
+I have just integrate it in my 3D cube
+*/
+
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+body {
+    background: #444;
+    perspective: 1200px;
+    padding-left: 50%;
+}
+
+.preface {
+    position: absolute;
+    transform: rotateX(45deg);
+    transform-style: preserve-3d;
+}
+
+.face {
+    padding: 30px;
+    height: 200px;
+    width: 200px;
+    transform-style: initial;
+    border: 1px #333 solid;
+    background: rgba(255, 255, 255, 0.9);
+    object-fit: contain;
+}
+
+.pip {
+    display: block;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #333;
+    box-shadow: inset 0 3px #111, inset 0 -3px #555;
+}
+
+#top .face {
+    transform-origin: top;
+    transform: translateY(-200px);
+    transform: rotateX(90deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#front .face {
+    transform: translateZ(200px);
+    display: flex;
+    justify-content: space-between;
+}
+
+.pip:nth-of-type(2) {
+    align-self: flex-end;
+}
+
+#bottom .face {
+    transform-origin: bottom;
+    transform: translateY(200px);
+    transform: rotateX(-90deg);
+    display: flex;
+    justify-content: space-between;
+}
+
+.pip:nth-of-type(2) {
+    align-self: center;
+}
+
+.pip:nth-of-type(3) {
+    align-self: flex-end;
+}
+
+#back .face {
+    display: flex;
+    justify-content: space-between;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#left .face {
+    transform-origin: left;
+    transform: translateX(-200px);
+    transform: rotateY(-90deg);
+    display: flex;
+    justify-content: space-between;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.column:nth-of-type(2) {
+    justify-content: center;
+}
+
+#right .face {
+    transform-origin: right;
+    transform: translateX(200px);
+    transform: rotateY(90deg);
+    display: flex;
+    justify-content: space-between;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+section {
+    padding-top: 40%;
+    transform-origin: 0% 0%;
+    animation: spinning 5s ease-in-out 0s infinite alternate;
+    transform-style: preserve-3d;
+}
+
+@keyframes spinning {
+    from {
+        transform: rotateY(0deg)
+    }
+    to {
+        transform: rotateY(360deg)
+    }
+}
+
+
