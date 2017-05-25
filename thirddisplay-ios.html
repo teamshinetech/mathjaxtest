@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <title>Display 3</title>
+    <link rel="stylesheet" href="./gilroyfont.css"/>
+    <style>
+        html {
+            font-family: Gilroy;
+            font-style: normal;
+        }
+
+        body {
+            background-color: #eeeeee;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        article.container {
+            position: relative;
+        }
+        article.container section.title {
+            border-radius: 5px;
+            background-color: #ffffff;
+            box-shadow: 0 0 4px #9ba0b1;
+        }
+
+        article.container section.title p {
+            padding-top: 0.4rem;
+            padding-bottom: 0.4rem;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.3rem;
+            font-size: 1.2rem;
+        }
+
+        article.container section.content {
+        }
+
+        article.container section.content .item {
+            position: relative;
+            left: 0;
+            width: 30%;
+            margin-bottom: 0.5rem;
+            margin-top: 0.5rem;
+            height: 5rem;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        article.container section.content .item button {
+            font-family: Gilroy;
+            font-size: large;
+            font-weight: 900;
+            background-color: #ff7247;
+            color: #ffffff;
+            border: 1px solid #9ba0b1;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #9ba0b1;
+            width: 100%;
+            height: 100%;
+            word-wrap: break-word;
+        }
+
+        article.container section.content .item.selected button {
+            background-color: yellow;
+            color: #000;
+        }
+
+        article.container section.content .item.left {
+            margin-left: 15%;
+            margin-right: 5%;
+        }
+
+        article.container section.content .item.right {
+            margin-right: 15%;
+            margin-left: 5%;
+        }
+
+        article.container section.ending button#submit {
+            width: 40%;
+            font-family: Gilroy;
+            font-size: large;
+            font-weight: 900;
+            background-color: #ff7247;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            margin-top: 0;
+            margin-left: 30%;
+            margin-right: 30%;
+            border: 1px solid #9ba0b1;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #9ba0b1;
+            height: 4rem;
+        }
+
+        article.container section.content .mask img {
+            display: none;
+        }
+
+        article.container section.content .mask.activated {
+            opacity: 0.5;
+            z-index: 100;
+        }
+
+        article.container section.content .mask.activated img {
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            width: 100%;
+            height: 100%;
+        }
+
+        .visible {
+            display: block !important;
+        }
+
+        .invisible {
+            display: none !important;
+        }
+    </style>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+        "HTML-CSS": {
+        linebreaks: { automatic: true, width: "container" }
+        }
+    });
+
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML-full">
+    </script>
+    <script src="./vue.js"></script>
+    <!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+    <!--<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>-->
+</head>
+<body>
+<article class="container" id="app">
+    <section class="title">
+        <p v-html="description"></p>
+    </section>
+    <section class="content">
+        <div v-for="question in questions" class="mask item"
+             v-bind:class="{'left' : question.isLeft, 'right': !question.isLeft, 'selected' : question.isSelected}">
+            <button @click="selectItem(question.id)">
+                {{question.content}}
+            </button>
+            <img alt="" v-bind:src="question.isCorrectAnswer ? './green.png' : './red.png'">
+        </div>
+    </section>
+    <section class="ending">
+        <button id="submit" @click="submitAnswers()">Submit</button>
+    </section>
+</article>
+<script type="text/javascript">
+    var dataSource = {
+        CorrectAnswer: "10/5",
+        Display1: "80,000/40,000|1 x 2|$$8,000 \\div 4,000$$|$$200 \\div 100$$|$$800 \\over 40$$|$$80 \\over 40$$",
+        DescriptionText: "Which of these <font color=red>doesn't</font> equal or represent <font color=green>half</font>?Which of these <font color=red>doesn't</font> equal or represent <font color=green>half</font>?Which of these <font color=red>doesn't</font> equal or represent <font color=green>half</font>?",
+        Display1RawValue: "50/100|72/144|50%|10/5|35/70|0.5"
+    };
+
+    function updateData(data) {
+        var updatedData = initializeData(data);
+        app.description = updatedData.description;
+        app.questions = updatedData.questions;
+        app.correctAnswer = updatedData.correctAnswer;
+        app.rawQuestions = updatedData.rawQuestions;
+        app.$nextTick(function () {
+//            MathJax.Hub.Typeset();
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        });
+    }
+
+    function sendMessageToNative(message) {
+        try {
+            window.webkit.messageHandlers.submit.postMessage(message);
+            display.getMessage(JSON.stringify(message));
+        } catch (ex) {
+            console.warn(ex.message);
+        }
+    }
+
+    function initializeData(data) {
+        var questions = [];
+        var transferredData = data.Display1.replace(/\\*over/g, '\\over');
+        var dataArray = transferredData.split('|');
+        var rawQuestions = data.Display1RawValue.split('|');
+        for (var i = 0; i < dataArray.length; i++) {
+            var questionItem;
+            if (i % 2 === 0) {
+                questionItem = {content: dataArray[i], isLeft: true, id: i, isSelected: false, isSubmitted: false}
+            } else {
+                questionItem = {content: dataArray[i], isLeft: false, id: i, isSelected: false, isSubmitted: false}
+            }
+            if (rawQuestions[i] !== data.CorrectAnswer) {
+                console.log("initialize questionItem.isCorrectAnswer" + false);
+                questionItem.isCorrectAnswer = false;
+            } else {
+                console.log("initialize questionItem.isCorrectAnswer" + true);
+                questionItem.isCorrectAnswer = true;
+            }
+            questions.push(questionItem);
+        }
+        return ({
+            description: data.DescriptionText,
+            questions: questions,
+            correctAnswer: data.CorrectAnswer,
+            rawQuestions: rawQuestions
+        });
+    }
+    //    var modifiedData = initializeData(dataSource);
+    //    console.log("data: " + JSON.stringify(modifiedData));
+    var app = new Vue({
+        el: '#app',
+        data: {
+            description: "",
+            questions: [],
+            correctAnswer: "",
+            rawQuestions: [],
+            studentAnswer: "",
+            isCorrectAnswer: false,
+            hasFilledOut: false
+        },
+        methods: {
+            selectItem: function (id) {
+                for (var i = 0; i < this.questions.length; i++) {
+                    if (i !== id) {
+                        this.questions[i].isSelected = false;
+                    }
+                }
+                this.questions[id].isSelected = !this.questions[id].isSelected;
+                console.log('click item' + id);
+            },
+            submitAnswers: function () {
+                console.log("submitAnswers");
+                var hasFilledOutSign = false;
+                for (var i = 0; i < this.questions.length; i++) {
+                    if (this.questions[i].isSelected) {
+                        hasFilledOutSign = true;
+                        this.studentAnswer = this.rawQuestions[i];
+                        this.isCorrectAnswer = this.studentAnswer === this.correctAnswer;
+                        this.questions[i].isSubmitted = true;
+                        sendMessageToNative({
+                            hasFilledOut: true,
+                            studentAnswer: this.studentAnswer,
+                            isCorrectAnswer: this.isCorrectAnswer
+                        });
+                        console.log('studentAnswer: ' + this.studentAnswer, 'isCorrectAnswer: ' + this.isCorrectAnswer);
+                    }
+                }
+                this.hasFilledOut = hasFilledOutSign;
+                console.log('hasFilledOut ' + this.hasFilledOut);
+                if (!this.hasFilledOut) {
+                    sendMessageToNative({hasFilledOut: false});
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>
