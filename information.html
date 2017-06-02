@@ -12,6 +12,7 @@
             font-style: normal;
             height: 100%;
             width: 100%;
+            font-size: 16px;
         }
 
         body {
@@ -74,7 +75,7 @@
         }
 
         section.content div.img-container {
-            width: 100%;
+            width: 85%;
             height: auto;
         }
 
@@ -94,6 +95,12 @@
             box-shadow: 0 0 5px #9ba0b1;
             background-color: #ffffff;
         }
+
+        @media only screen and (max-device-height: 650px) {
+            html {
+                font-size: 10px !important;
+            }
+        }
     </style>
     <script src="./vue.js"></script>
 </head>
@@ -112,8 +119,8 @@
 <script>
     var dataSource = {
         ActivityID: 381,
-        Name: "Info Style Placeholder",
-        DescriptionText: "Info Style Placeholder",
+        Name: "Info Style Placeholder Info Style Placeholder",
+        DescriptionText: "Info Style Placeholder Info Style Placeholder",
         Rank: 2,
         DisplayMethod: 100,
         Display1: "../Images/InformationalType/DYK_BACK.PNG",
