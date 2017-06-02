@@ -44,10 +44,6 @@
             text-align: center;
         }
 
-        main.blue button, h1 {
-            color: #1976D2;
-        }
-
         header img {
             width: 3rem;
             height: auto;
@@ -105,12 +101,12 @@
 <main id="app" :class="color">
     <header>
         <div class="img-container"><img :src="titleImageAddress" alt="titleImage"/></div>
-        <h1>{{title}}</h1>
+        <h1 :style="{color: color}">{{title}}</h1>
     </header>
 
     <section class="content" :style="{ backgroundImage: backgroundImageAddress}">
         <div class="img-container"><img :src="contentImageAddress" alt="contentImage"></div>
-        <button>GOT IT!</button>
+        <button :style="{color: color}">{{buttonTitle}}</button>
     </section>
 </main>
 <script>
@@ -122,7 +118,11 @@
         DisplayMethod: 100,
         Display1: "../Images/InformationalType/DYK_BACK.PNG",
         Display2: "../Images/InformationalType/DYK_QUEST.PNG",
-        Display3: "../Images/ALG1A/Unit1/Lesson1/u1_L2.S1.LI.1_fractioncircle.png"
+        Display3: "../Images/ALG1A/Unit1/Lesson1/u1_L2.S1.LI.1_fractioncircle.png",
+        Display1RawValue: "#1976d2",
+        Display2RawValue: "GOT IT!",
+        MessageCorrectAnswer: "You rock!",
+        MessageIncorrectAnswer: "Try again!"
     };
 
     function updateData(data) {
@@ -132,20 +132,26 @@
         app.title = updatedData.title;
         app.contentImageAddress = updatedData.contentImageAddress;
         app.backgroundImageAddress = 'url(' + updatedData.backgroundImageAddress + ')';
+        app.color = updatedData.color;
+        app.buttonTitle = updatedData.buttonTitle;
     }
 
     function initializeData(data) {
-        var ImageRootPath = "https://dev-hippo-srv.edudyn.com/"; // root path for either iPhone or Android
+        var ImageRootPath = "https://dev-hippo-srv.edudyn.com/";        // root path for either iPhone or Android
         var titleImageAddress = ImageRootPath + data.Display2.slice(2);
         var title = data.Name;
         var contentImageAddress = ImageRootPath + data.Display3.slice(2);
         var backgroundImageAddress = ImageRootPath + data.Display1.slice(2);
+        var color = data.Display1RawValue;
+        var buttonTitle = data.Display2RawValue;
 
         return ({
             titleImageAddress: titleImageAddress,
             title: title,
             contentImageAddress: contentImageAddress,
-            backgroundImageAddress: backgroundImageAddress
+            backgroundImageAddress: backgroundImageAddress,
+            color: color,
+            buttonTitle: buttonTitle
         })
     }
 
@@ -156,7 +162,8 @@
             title: "",
             contentImageAddress: "",
             backgroundImageAddress: "",
-            color: 'blue'
+            color: "#1976d2",
+            buttonTitle: "GOT IT!"
         }
     });
 
