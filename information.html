@@ -106,7 +106,7 @@
 
     <section class="content" :style="{ backgroundImage: backgroundImageAddress}">
         <div class="img-container"><img :src="contentImageAddress" alt="contentImage"></div>
-        <button :style="{color: color}">{{buttonTitle}}</button>
+        <button :style="{color: color}" @click="submitAnswers()">{{buttonTitle}}</button>
     </section>
 </main>
 <script>
@@ -134,7 +134,22 @@
         app.backgroundImageAddress = 'url(' + updatedData.backgroundImageAddress + ')';
         app.color = updatedData.color;
         app.buttonTitle = updatedData.buttonTitle;
+        app.originalButtonTitle = updatedData.buttonTitle;
     }
+
+    function sendMessageToNative(message) {
+        try {
+            window.webkit.messageHandlers.submit.postMessage(message);
+        } catch (ex) {
+            console.warn(ex.message);
+        }
+        try {
+            display.getMessage();
+        } catch (ex) {
+            console.warn(ex.message);
+        }
+    }
+
 
     function initializeData(data) {
         var ImageRootPath = "https://dev-hippo-srv.edudyn.com/";        // root path for either iPhone or Android
@@ -163,11 +178,38 @@
             contentImageAddress: "",
             backgroundImageAddress: "",
             color: "#1976d2",
-            buttonTitle: "GOT IT!"
+            buttonTitle: "GOT IT!",
+            originalButtonTitle: "",
+            timer: 10,
+            hasStarted: false
+        },
+        methods: {
+            configSubmitButton: function () {
+                if (this.timer > 0) {
+                    this.buttonTitle = this.timer + 's';
+                    this.timer--;
+                    setTimeout(this.configSubmitButton.bind(this), 1000);
+                } else {
+                    this.buttonTitle = this.originalButtonTitle;
+                }
+            },
+            submitAnswers: function () {
+                if (this.timer === 0) {
+                    console.log('timer === 0 and sendMessageToNative fired!');
+                    sendMessageToNative('');
+                }
+            }
+        },
+        mounted: function () {
+            console.log('mounted');
+        },
+        updated: function () {
+            if (!this.hasStarted) {
+                this.hasStarted = true;
+                this.configSubmitButton();
+            }
         }
     });
-
-    updateData(dataSource);
 </script>
 </body>
 </html>

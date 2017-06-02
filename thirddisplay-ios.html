@@ -40,7 +40,7 @@
         }
 
         article.container section.title p .MathJax_Display {
-            display: inline!important;
+            display: inline !important;
         }
 
         article.container section.content {
@@ -140,6 +140,8 @@
         linebreaks: { automatic: true, width: "container" }
         }
     });
+
+
     </script>
     <script type="text/javascript" src="./mathj/MathJax.js?config=TeX-AMS_HTML-full">
     </script>
@@ -188,6 +190,10 @@
     function sendMessageToNative(message) {
         try {
             window.webkit.messageHandlers.submit.postMessage(message);
+        } catch (ex) {
+            console.warn(ex.message);
+        }
+        try {
             display.getMessage(JSON.stringify(message));
         } catch (ex) {
             console.warn(ex.message);
