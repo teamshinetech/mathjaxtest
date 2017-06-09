@@ -91,7 +91,7 @@
         }
 
         article.container section.content section.questions div.item.drop-active {
-            border: dashed darkgreen 3px;
+            /*border: dashed darkgreen 3px;*/
         }
 
         article.container section.content section.questions div.item.drop-target {
@@ -124,13 +124,6 @@
     MathJax.Hub.Config({
         tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
     });
-
-
-
-
-
-
-
     </script>
     <script type="text/javascript"
             src="./mathj/MathJax.js?config=TeX-AMS_HTML-full">
@@ -380,7 +373,7 @@
                 this.isVisible = true;
             }
         }
-    })
+    });
 
     function makeItemVisible() {
         app.makeItemVisible();
