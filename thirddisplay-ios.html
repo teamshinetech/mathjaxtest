@@ -40,7 +40,7 @@
         }
 
         article.container section.title p .MathJax_Display {
-            display: inline !important;
+            display: inline!important;
         }
 
         article.container section.content {
@@ -141,7 +141,8 @@
         }
     });
     </script>
-    <script type="text/javascript" src="./mathj/MathJax.js?config=TeX-AMS_HTML-full">
+    <script type="text/javascript"
+            src="./mathj/MathJax.js?config=TeX-AMS_HTML-full">
     </script>
     <script src="./vue.js"></script>
     <!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
@@ -168,8 +169,8 @@
 <script type="text/javascript">
     var dataSource = {
         CorrectAnswer: "800/40",
-        Display1: "$${5\\over9}\\text{ + }{6\\over12}\\text{ = }{20\\over36}\\text{ + }{18\\over36}$$|$${5\\over9}\\text{ + }{6\\over12}\\text{ = }{10\\over18}\\text{ + }{12\\over24}$$|$${5\\over9}\\text{ + }{6\\over12}\\text{ = }{5\\over36}\\text{ + }{6\\over36}$$",
-        DescriptionText: "Jackie $$10^{18}$$ works in a lab, testing water quality for the city. She's given a glass of water that contains on septillion water molecules (whoa, molecules must be small!) Jackie has to take a sample of at least on trillion molecules for her test to be accurate and she likes to do it more than once to confim her findings. How many tests could she do if she used the whole glass of water? <br/> $$10^{18}$$",
+        Display1: "Quintillion, $$10^{18}$$|Billion, $$10^{9}$$|Sextillion, $$10^{21}$$|Quadrillion, $$10^{15}$$",
+        DescriptionText: "Jackie $$10^{18}$$ works in a lab, testing water quality for the city. She's given a glass of water that contains on septillion water molecules (whoa, molecules must be small!) Jackie has to take a sample of at least on trillion molecules for her test to be accurate and she likes to do it more than once to confim her findings. How many tests could she do if she used the whole glass of water?",
         Display1RawValue: "80,000/40,000|1 x 2|8,000/4,000|200/100|800/40|80/40"
     };
 
@@ -188,10 +189,6 @@
     function sendMessageToNative(message) {
         try {
             window.webkit.messageHandlers.submit.postMessage(message);
-        } catch (ex) {
-            console.warn(ex.message);
-        }
-        try {
             display.getMessage(JSON.stringify(message));
         } catch (ex) {
             console.warn(ex.message);
@@ -273,7 +270,7 @@
                 }
             }
         }
-    });
+    })
 </script>
 </body>
 </html>

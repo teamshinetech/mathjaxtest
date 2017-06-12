@@ -36,6 +36,11 @@
             font-weight: 500;
             text-align: center;
             line-height: 1.3rem;
+            font-size: 1.2rem;
+        }
+
+        article.container section.title p .MathJax_Display {
+            display: inline!important;
         }
 
         article.container section.content {
@@ -47,12 +52,13 @@
             width: 30%;
             margin-bottom: 0.5rem;
             margin-top: 0.5rem;
-            height: 5rem;
+            height: 6rem;
             display: inline-block;
             vertical-align: top;
         }
 
         article.container section.content .item button {
+            padding: 0;
             font-family: Gilroy;
             font-size: large;
             font-weight: 900;
@@ -63,6 +69,7 @@
             box-shadow: 0 0 5px #9ba0b1;
             width: 100%;
             height: 100%;
+            word-wrap: break-word;
         }
 
         article.container section.content .item.selected button {
@@ -128,13 +135,14 @@
     </style>
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
-        tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+        tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+        "HTML-CSS": {
+        linebreaks: { automatic: true, width: "container" }
+        }
     });
-
-
-
     </script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML-full">
+    <script type="text/javascript"
+            src="./mathj/MathJax.js?config=TeX-AMS_HTML-full">
     </script>
     <script src="./vue.js"></script>
     <!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
@@ -160,10 +168,10 @@
 </article>
 <script type="text/javascript">
     var dataSource = {
-        CorrectAnswer: "10/5",
-        Display1: "$${50 \over 100}$$|$${72 \over 144}$$|50%|$${10 \over 5}$$|$${35 \over 70}$$|0.5",
-        DescriptionText: "Which of these <font color=red>doesn't</font> equal or represent <font color=green>half</font>?Which of these <font color=red>doesn't</font> equal or represent <font color=green>half</font>?Which of these <font color=red>doesn't</font> equal or represent <font color=green>half</font>?",
-        Display1RawValue: "50/100|72/144|50%|10/5|35/70|0.5"
+        CorrectAnswer: "800/40",
+        Display1: "Quintillion, $$10^{18}$$|Billion, $$10^{9}$$|Sextillion, $$10^{21}$$|Quadrillion, $$10^{15}$$",
+        DescriptionText: "Jackie $$10^{18}$$ works in a lab, testing water quality for the city. She's given a glass of water that contains on septillion water molecules (whoa, molecules must be small!) Jackie has to take a sample of at least on trillion molecules for her test to be accurate and she likes to do it more than once to confim her findings. How many tests could she do if she used the whole glass of water?",
+        Display1RawValue: "80,000/40,000|1 x 2|8,000/4,000|200/100|800/40|80/40"
     };
 
     function updateData(data) {
@@ -181,10 +189,6 @@
     function sendMessageToNative(message) {
         try {
             window.webkit.messageHandlers.submit.postMessage(message);
-        } catch (ex) {
-            console.warn(ex.message);
-        }
-        try {
             display.getMessage(JSON.stringify(message));
         } catch (ex) {
             console.warn(ex.message);
