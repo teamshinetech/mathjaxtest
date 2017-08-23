@@ -68,13 +68,21 @@ var add_the_handles_bad = function (nodes) {
 var add_the_handles_good = function (nodes) {
   var i;
   for (i = 0; i < nodes.length; i += 1) {
-    nodes[i].onclick = function (i) {
+    nodes[i].onclick = (function (i) {
       return function (e) {
         alert(i);
       }
-    }(i);
+    }(i));
   }
 };
+
+for (var i = 0; i < 5; i++) {
+  (function (idx) {
+    setTimeout(function () {
+      console.log(idx);
+    }, 5);
+  }(i));
+}
 
 //module
 String.method('deentityify', function () {
@@ -83,10 +91,10 @@ String.method('deentityify', function () {
     lt: '<',
     gt: '>'
   };
-  
+
   return (function () {
     return this.replace(/\d/);
-  })()
+  }())
 });
 
 var serial_maker = function () {
